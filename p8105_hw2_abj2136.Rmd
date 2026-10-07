@@ -17,10 +17,9 @@ library(readxl)
 
 # Problem 2
 
-## Importing dataset
+## Mr Trash Wheel
 ```{r}
 # Looking at the sheets in the file
-
 excel_sheets("202610 Trash Wheel Collection Data.xlsx")
 
 #importing and cleaning the the mr trash wheel dataset
@@ -33,9 +32,34 @@ mr_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
   janitor::clean_names() |> 
   drop_na(dumpster) |> 
   mutate(sports_balls = as.integer(round(sports_balls)))
-  
-  
-
-
 ```
+
+## Professor Trash Wheel
+```{r}
+#importing and cleaning the the prof trash wheel dataset
+
+prof_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
+                      sheet = "Professor Trash Wheel",
+                      range = "A2:M139",
+                      na = c("","NA", ".")
+                      ) |>
+  janitor::clean_names() |> 
+  drop_na(dumpster)
+```
+
+## Gwynnda the Good Wheel of the West
+```{r}
+#importing and cleaning the the prof trash wheel dataset
+
+gwynnda_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
+                      sheet = "Gwynnda the Good Wheel of the W",
+                      range = "A2:L394",
+                      na = c("","NA", ".")
+                      ) |>
+  janitor::clean_names() |> 
+  drop_na(dumpster)
+```
+
+
+
 
