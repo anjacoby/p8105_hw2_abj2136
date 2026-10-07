@@ -42,7 +42,7 @@ mr_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
 ```
 
 ## Professor Trash Wheel
-```{r}
+```{r warning = FALSE}
 #importing and cleaning the the prof trash wheel dataset
 
 prof_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
@@ -69,7 +69,7 @@ gwynnda_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
 ```
 
 ## Merging datasets
-```{r}
+```{r message = FALSE}
 # creating a trash_wheel variable to keep track of which trash wheel is which after merging
 
 mr_trash_df = mr_trash_df |> 
@@ -124,12 +124,31 @@ The first row of the data set acted like a code book, defining what the values m
 
 
 ## Importing and cleaning amyloid data
-```{r}
+```{r message = FALSE}
 
  amyloid_df = read_csv("data_mci/mci_amyloid.csv",
-                       na = c("", ".", "NA"))
-
+                       na = c("", ".", "NA", "Na"),
+                       skip = 1) |> 
+  janitor::clean_names() |> 
+  rename(id = study_id) |> 
+  pivot_longer(
+    baseline:time_8,
+    names_to = "time",
+    values_to = "amyloid_ratio"
+  )
+  
 ```
+First, I cleaned the data by specifying missing values, skipping the first row 
+with variable descriptions (so the first row was variables names), and cleaning
+the names. Then, to make it possible to merge the amyloid and baseline data, I 
+renamed the study_id variable in the amyloid data to match the id variable in 
+the baseline data set.
 
- 
+This data set is wide, with multiple amyloid ratio measurements per person, 
+at different time points. To tidy it and facilitate data analysis, I made 
+it a longer data set, using pivot_longer to put all the amyloid_ratio values 
+in one column (with multiple values for each patient id), with another variable 
+called time to specify which timepoint the amyloid_ratio value came from.
+
+The final tidied dataset contains `r nrow(amyloid_df)` observations. 
 
