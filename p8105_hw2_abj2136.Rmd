@@ -35,14 +35,15 @@ mr_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
   mutate(sports_balls = as.integer(round(sports_balls))) |> 
   mutate(year = as.integer(year))
   
-  # used glimpse in the console to determine variable types for all three data frames to 
-  # determine which variables were entered as characters vs numeric values. In Mr.Trash 
-  # the year variable needed to be converted to an integer, and in Professor trash the 
-  # plastic bottles variable needed to be converted to numeric. 
+   # used glimpse in the console to determine variable types for all three data 
+   # frames to  determine which variables were entered as characters vs numeric 
+   # values. In Mr.Trash the year variable needed to be converted to an integer, 
+   # and in Professor trash the plastic bottles variable needed to be converted 
+   # to numeric. 
 ```
 
 ## Professor Trash Wheel
-```{r warning = FALSE}
+```{r}
 #importing and cleaning the the prof trash wheel dataset
 
 prof_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
