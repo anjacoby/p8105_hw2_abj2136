@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r message = FALSE}
 library(tidyverse)
 library(readxl)
+library(readr)
 ```
 
 
@@ -67,7 +68,7 @@ gwynnda_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
   drop_na(dumpster)
 ```
 
-# Merging datasets
+## Merging datasets
 ```{r}
 # creating a trash_wheel variable to keep track of which trash wheel is which after merging
 
@@ -92,5 +93,43 @@ combined_trash_df =
 ```
 
 The final combined dataset contains `r nrow(combined_trash_df)` observations and `r ncol(combined_trash_df)` variables, such as `r names(combined_trash_df)`. Professor Trash Wheel collected a total of `r combined_trash_df |> filter(trash_wheel == "Professor Trash Wheel") |>  pull(weight_tons) |> sum(na.rm = TRUE)` tons of trash. Gwynnda the Good Wheel of the West collected `r combined_trash_df |> filter(trash_wheel == "Gwynnda the Good Wheel of the W", str_to_lower(month) == "june", year == 2022) |> pull(cigarette_butts) |> sum(na.rm = TRUE) |> scales::comma()` cigarette butts in June 2022. 
+
+
+# Problem 3
+
+## Importing and cleaning the baseline demographics data
+
+```{r message = FALSE}
+
+# keeping this here to see what original variables are called before skip
+
+baseline_raw = read_csv("data_mci/MCI_baseline.csv")
+
+# cleaning data set
+
+baseline_df = read_csv("data_mci/MCI_baseline.csv",
+                       na = c("", ".", "NA"),
+                       skip = 1) |> 
+  janitor::clean_names() |> 
+  mutate(
+    sex = recode_values(sex, 1 ~ "male", 0 ~ "female"),
+    apoe4 = recode_values(apoe4, 1 ~ "carrier", 0 ~ "non-carrier")
+    ) |> 
+    filter(is.na(age_at_onset) | age_at_onset > current_age)
+```
+
+The first row of the data set acted like a code book, defining what the values meant for the variables below. I kept one read.csv line with the raw version so I could refer back to this code, as I skipped that row when I was cleaning my data. I had to recode the sex and apoe4 variables to change them from numeric to male/female and carrier/noncarrier. To filter the data to only keep those who had MCI at baseline, I kept everyone who had age of onset = na (never developed MCI) and everyone who developed MCI after baseline (based on if their age of MCI onset was greater than their age at baseline(current_age variable)), as these are the people who would be MCI free at baseline. 
+
+`r nrow(baseline_raw)-1` participants were recruited into the study and `r nrow(baseline_df)` participants were eligible for the study. Of these participants `r baseline_df |> filter(!is.na(age_at_onset)) |> nrow()` developed MCI.The average baseline age among those who participated in the study was `r baseline_df |> pull(current_age) |> mean() |> round (1)` years. `r baseline_df |> filter(sex == "female") |> summarise(prop = mean(apoe4 == "carrier", na.rm = TRUE))|> pull(prop) |> scales::percent(accuracy = 0.1)` of the women in the study are APOE4 carriers.
+
+
+## Importing and cleaning amyloid data
+```{r}
+
+ amyloid_df = read_csv("data_mci/mci_amyloid.csv",
+                       na = c("", ".", "NA"))
+
+```
+
  
 
