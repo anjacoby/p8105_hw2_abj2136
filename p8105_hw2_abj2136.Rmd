@@ -1,0 +1,41 @@
+---
+title: "p8105_hw2_abj2136"
+output: github_document
+date: "2026-10-07"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Installing libraries
+```{r message = FALSE}
+library(tidyverse)
+library(readxl)
+```
+
+
+# Problem 2
+
+## Importing dataset
+```{r}
+# Looking at the sheets in the file
+
+excel_sheets("202610 Trash Wheel Collection Data.xlsx")
+
+#importing and cleaning the the mr trash wheel dataset
+
+mr_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
+                      sheet = "Mr. Trash Wheel",
+                      range = "A2:N742",
+                      na = c("","NA", ".")
+                      ) |>
+  janitor::clean_names() |> 
+  drop_na(dumpster) |> 
+  mutate(sports_balls = as.integer(round(sports_balls)))
+  
+  
+
+
+```
+
