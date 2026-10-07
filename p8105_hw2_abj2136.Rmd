@@ -31,7 +31,13 @@ mr_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
                       ) |>
   janitor::clean_names() |> 
   drop_na(dumpster) |> 
-  mutate(sports_balls = as.integer(round(sports_balls)))
+  mutate(sports_balls = as.integer(round(sports_balls))) |> 
+  mutate(year = as.integer(year))
+  
+  # used glimpse in the console to determine variable types for all three data frames to 
+  # determine which variables were entered as characters vs numeric values. In Mr.Trash 
+  # the year variable needed to be converted to an integer, and in Professor trash the 
+  # plastic bottles variable needed to be converted to numeric. 
 ```
 
 ## Professor Trash Wheel
@@ -44,7 +50,8 @@ prof_trash_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
                       na = c("","NA", ".")
                       ) |>
   janitor::clean_names() |> 
-  drop_na(dumpster)
+  drop_na(dumpster) |> 
+  mutate(plastic_bottles = as.numeric(plastic_bottles))
 ```
 
 ## Gwynnda the Good Wheel of the West
@@ -60,6 +67,30 @@ gwynnda_df = read_excel("202610 Trash Wheel Collection Data.xlsx",
   drop_na(dumpster)
 ```
 
+# Merging datasets
+```{r}
+# creating a trash_wheel variable to keep track of which trash wheel is which after merging
+
+mr_trash_df = mr_trash_df |> 
+  mutate(trash_wheel = "Mr. Trash Wheel")
+
+prof_trash_df = prof_trash_df |> 
+  mutate(trash_wheel = "Professor Trash Wheel")
+
+gwynnda_df = gwynnda_df |> 
+  mutate(trash_wheel = "Gwynnda the Good Wheel of the W")
+
+# merging the datasets
+
+combined_trash_df = 
+  bind_rows(
+    mr_trash_df,
+    prof_trash_df,
+    gwynnda_df, 
+  )
+
+
+```
 
 
 
