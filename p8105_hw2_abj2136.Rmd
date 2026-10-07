@@ -89,8 +89,8 @@ combined_trash_df =
     gwynnda_df, 
   )
 
-
 ```
 
-
+The final combined dataset contains `r nrow(combined_trash_df)` observations and `r ncol(combined_trash_df)` variables, such as `r names(combined_trash_df)`. Professor Trash Wheel collected a total of `r combined_trash_df |> filter(trash_wheel == "Professor Trash Wheel") |>  pull(weight_tons) |> sum(na.rm = TRUE)` tons of trash. Gwynnda the Good Wheel of the West collected `r combined_trash_df |> filter(trash_wheel == "Gwynnda the Good Wheel of the W", str_to_lower(month) == "june", year == 2022) |> pull(cigarette_butts) |> sum(na.rm = TRUE) |> scales::comma()` cigarette butts in June 2022. 
+ 
 
